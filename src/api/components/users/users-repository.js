@@ -1,4 +1,5 @@
 const { Users } = require('../../../models');
+const { loginUser } = require('./users-service');
 
 async function getUsers() {
   return Users.find({});
@@ -28,6 +29,22 @@ async function deleteUser(id) {
   return Users.deleteOne({ _id: id });
 }
 
+async function loginUser(email, password) {
+  const user = await getUserByEmail(email);
+  if (!user) {
+    throw new Error('Invalid email or password');
+  }
+
+  // Cek apakah password cocok
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    throw new Error('Invalid email or password');
+  }
+
+  // Jika valid, kembalikan user
+  return user;
+}
+
 module.exports = {
   getUsers,
   getUser,
@@ -36,4 +53,5 @@ module.exports = {
   updateUser,
   changePassword,
   deleteUser,
+  loginUser,
 };

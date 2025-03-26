@@ -13,6 +13,10 @@ async function emailExists(email) {
   return !!user; // Return true if user exists, false otherwise
 }
 
+async function loginUser(email, password) {
+  return usersRepository.loginUser(email, password);
+}
+
 async function createUser(email, password, fullName) {
   return usersRepository.createUser(email, password, fullName);
 }
@@ -32,4 +36,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
+  loginUser,
 };
